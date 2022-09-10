@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  reactjs:
+    build: .
+    container_name: reactjs
+    user: "1000:1000"
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    ports: 
+      - '3000:3000'
+    command: sleep 1d
