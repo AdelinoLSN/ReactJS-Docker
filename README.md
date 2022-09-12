@@ -36,3 +36,56 @@ services:
         ports:
           - 3000:3000
         command: npm start
+        
+        
+        
+        
+        
+1  
+.dockerignore
+@@ -0,0 +1 @@
+**/node_modules
+ 25  
+Dockerfile
+@@ -0,0 +1,25 @@
+FROM node:14.16.0
+
+WORKDIR /usr/src/app/
+
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y \
+    vim \
+    nano
+
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
+RUN npm install -g npm@6.14.11
+
+COPY package*.json /usr/src/app/
+
+RUN mkdir /usr/src/app/node_modules
+
+RUN chown node:node -R /usr/src/app/node_modules/
+
+RUN npm install
+
+RUN rm /usr/src/app/package-*.json
+
+COPY . .
+ 13  
+docker-compose.yml
+@@ -0,0 +1,13 @@
+version: "3"
+
+services:
+    reactjs:
+        container_name: adota_pet
+        build: .
+        user: '1000'
+        volumes:
+          - '.:/usr/src/app'
+          - '/usr/src/app/node_modules'
+        ports:
+          - '3000:3000'
+        command: npm start
